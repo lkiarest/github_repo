@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Voice Realtime Demo</title>
+<style>
+body{font-family:sans-serif;background:#0b1020;color:white;text-align:center;padding:20px}
+button{padding:15px 25px;border-radius:12px;border:none;font-size:16px;margin:10px}
+#log{margin-top:20px;font-size:14px;color:#94a3b8;white-space:pre-wrap}
+</style>
+</head>
+<body>
+<h2>🎤 实时语音助手</h2>
+<button onclick="start()">开始说话</button>
+<button onclick="stop()">结束</button>
+<div id="log"></div>
+<script>
+let ws;
+let mediaRecorder;
+
+function log(msg){document.getElementById('log').innerText+=msg+"\n"}
+
+async function start(){
+  ws=new WebSocket("ws://127.0.0.1:8000/ws/webrtc");
+  ws.onmessage=e=>{
+    const m=JSON.parse(e.data);
+    log(JSON.stringify(m));
+    if(m.type==="response.audio.chunk"){
+      const audio=new Audio("data:audio/wav;base64,"+m.audio_base64);
+      audio.play();
+    }
+  };
+
+  const stream=await navigator.mediaDevices.getUserMedia({audio:true});
+  mediaRecorder=new MediaRecorder(stream);
+
+  mediaRecorder.ondataavailable=async e=>{
+    const ab=await e.data.arrayBuffer();
+    const b64=btoa(String.fromCharCode(...new Uint8Array(ab)));
+    ws.send(JSON.stringify({type:"input_audio_buffer.append",audio_base64:b64}));
+  };
+
+  mediaRecorder.start(300);
+}
+
+function stop(){
+  mediaRecorder.stop();
+  ws.send(JSON.stringify({type:"input_audio_buffer.commit"}));
+}
+</script>
+</body>
+</html>
