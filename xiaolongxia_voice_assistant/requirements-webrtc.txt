@@ -1,0 +1,5 @@
+aiortc
+av
+numpy
+fastapi
+uvicorn
