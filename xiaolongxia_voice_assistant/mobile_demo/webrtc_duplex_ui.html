@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<style>
+body{background:#0b1020;color:white;text-align:center;font-family:sans-serif}
+.circle{width:120px;height:120px;border-radius:50%;background:#10a37f;margin:40px auto;animation:pulse 1.2s infinite}
+@keyframes pulse{0%{transform:scale(1)}50%{transform:scale(1.2)}100%{transform:scale(1)}}
+#status{margin-top:10px;color:#94a3b8}
+</style>
+</head>
+<body>
+<h2>🎤 实时语音（全双工）</h2>
+<div class="circle"></div>
+<div id="status">连接中...</div>
+<script>
+let pc, dc;
+async function start(){
+  pc=new RTCPeerConnection();
+  dc=pc.createDataChannel("chat");
+  dc.onmessage=e=>{
+    const m=JSON.parse(e.data);
+    if(m.type==="response.audio.chunk"){
+      const a=new Audio("data:audio/wav;base64,"+m.audio_base64);
+      a.play();
+    }
+    if(m.type==="response.text.delta"){
+      document.getElementById('status').innerText=m.delta;
+    }
+  };
+  const stream=await navigator.mediaDevices.getUserMedia({audio:true});
+  stream.getTracks().forEach(t=>pc.addTrack(t,stream));
+  const offer=await pc.createOffer();
+  await pc.setLocalDescription(offer);
+  const res=await fetch('/rtc/offer',{method:'POST',body:JSON.stringify(offer)});
+  const answer=await res.json();
+  await pc.setRemoteDescription(answer);
+}
+start();
+</script>
+</body>
+</html>
