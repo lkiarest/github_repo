@@ -31,7 +31,7 @@ jobs:
             cp pubspec.release.yaml pubspec.yaml
           fi
           if [ -f lib/main_release_v3.dart ]; then
-            cp lib/main_release_v3.dart lib/main.dart
+            cp lib/main_release_v4.dart lib/main.dart
           fi
           ls -la
 
