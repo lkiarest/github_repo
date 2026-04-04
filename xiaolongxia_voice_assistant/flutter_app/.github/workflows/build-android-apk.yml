@@ -1,0 +1,58 @@
+name: Build Android APK
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - flutter-mobile
+    paths:
+      - 'xiaolongxia_voice_assistant/flutter_app/**'
+
+jobs:
+  build-android:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: xiaolongxia_voice_assistant/flutter_app
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+
+      - name: Show Flutter version
+        run: flutter --version
+
+      - name: Ensure release entrypoint exists
+        run: |
+          if [ -f lib/main_release_v3.dart ]; then
+            cp lib/main_release_v3.dart lib/main.dart
+          fi
+
+      - name: Create fallback pubspec if needed
+        run: |
+          if [ ! -f pubspec.yaml ] && [ -f pubspec.release.yaml ]; then
+            cp pubspec.release.yaml pubspec.yaml
+          fi
+
+      - name: Flutter pub get
+        run: flutter pub get
+
+      - name: Build debug APK
+        run: flutter build apk --debug
+
+      - name: Upload APK artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: xiaolongxia-android-apk
+          path: xiaolongxia_voice_assistant/flutter_app/build/app/outputs/flutter-apk/*.apk
