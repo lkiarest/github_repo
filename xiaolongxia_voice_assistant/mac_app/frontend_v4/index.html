@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>小龙虾语音助手</title>
+  <style>
+    :root { --bg:#0b1020; --panel:rgba(17,24,39,.82); --panel2:rgba(15,23,42,.75); --border:rgba(255,255,255,.08); --text:#eef2ff; --muted:#94a3b8; --accent:#10a37f; --danger:#ef4444; --user:#1d4ed8; --shadow:0 20px 60px rgba(0,0,0,.35);} *{box-sizing:border-box} html,body{height:100%} body{margin:0;color:var(--text);font-family:Inter,-apple-system,BlinkMacSystemFont,"SF Pro Display","PingFang SC",sans-serif;background:radial-gradient(circle at top left,rgba(16,163,127,.18),transparent 28%),radial-gradient(circle at top right,rgba(37,99,235,.14),transparent 24%),linear-gradient(180deg,#0b1020 0%,#0f172a 100%);overflow:hidden}.app{height:100%;display:grid;grid-template-columns:88px 1fr 340px;gap:16px;padding:16px}.sidebar,.main,.rightbar{background:var(--panel);border:1px solid var(--border);backdrop-filter:blur(24px);box-shadow:var(--shadow);border-radius:24px}.sidebar{display:flex;flex-direction:column;align-items:center;justify-content:space-between;padding:16px 0}.brand{width:56px;height:56px;border-radius:18px;display:grid;place-items:center;font-size:28px;background:linear-gradient(135deg,rgba(16,163,127,.25),rgba(52,211,153,.15));border:1px solid rgba(255,255,255,.08)}.nav-col{display:flex;flex-direction:column;gap:10px}.nav-btn{width:56px;height:56px;border-radius:18px;border:1px solid transparent;background:rgba(255,255,255,.03);color:var(--text);cursor:pointer;font-size:20px}.nav-btn.active,.nav-btn:hover{background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.08)}.main{display:grid;grid-template-rows:92px 1fr 154px;overflow:hidden}.topbar{padding:20px 24px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border)}.title-wrap h1{margin:0;font-size:24px;font-weight:700}.title-wrap p{margin:6px 0 0;color:var(--muted);font-size:13px}.status-pill{display:inline-flex;align-items:center;gap:10px;padding:10px 14px;border-radius:999px;background:rgba(255,255,255,.04);border:1px solid var(--border);font-size:13px;color:var(--muted)}.dot{width:10px;height:10px;border-radius:50%;background:#64748b}.dot.on{background:#34d399}.chat-scroll{overflow:auto;padding:24px;display:flex;flex-direction:column;gap:18px}.welcome{padding:22px;border-radius:22px;background:linear-gradient(135deg,rgba(16,163,127,.13),rgba(29,78,216,.09));border:1px solid rgba(255,255,255,.06)}.welcome h2{margin:0 0 8px;font-size:20px}.welcome p{margin:0;color:var(--muted);line-height:1.6}.message-row{display:flex;gap:12px;align-items:flex-start}.message-row.user{justify-content:flex-end}.avatar{width:36px;height:36px;border-radius:12px;display:grid;place-items:center;font-size:18px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.06)}.bubble{max-width:min(78%,740px);padding:14px 16px;border-radius:18px;line-height:1.65;font-size:14px;white-space:pre-wrap;word-break:break-word;border:1px solid rgba(255,255,255,.06)}.message-row.user .bubble{background:linear-gradient(180deg,rgba(29,78,216,.92),rgba(30,64,175,.92));border-bottom-right-radius:8px}.message-row.assistant .bubble{background:rgba(15,23,42,.8);border-bottom-left-radius:8px}.meta{margin-top:6px;color:var(--muted);font-size:11px}.composer{padding:16px 20px;border-top:1px solid var(--border);display:grid;grid-template-columns:1fr auto;gap:12px;align-items:center;background:linear-gradient(180deg,rgba(15,23,42,.12),rgba(15,23,42,.42))}.stack{display:flex;flex-direction:column;gap:10px}.input-shell,.model-shell{display:flex;align-items:center;gap:12px;background:var(--panel2);border:1px solid var(--border);border-radius:20px;padding:12px 14px}.input-shell textarea{width:100%;resize:none;border:none;outline:none;background:transparent;color:var(--text);font-size:14px;line-height:1.5;max-height:100px}.model-shell select,.model-shell input{background:#020617;color:var(--text);border:1px solid rgba(255,255,255,.08);border-radius:10px;padding:8px 10px;font-size:13px}.model-shell input{flex:1}.model-label{font-size:12px;color:var(--muted);min-width:56px}.action-group{display:flex;gap:10px;align-items:center}.btn{border:none;border-radius:16px;padding:12px 16px;font-weight:600;font-size:13px;cursor:pointer}.btn-primary{color:white;background:linear-gradient(135deg,var(--accent),#0f766e)}.btn-muted{color:white;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.06)}.btn-danger{color:white;background:linear-gradient(135deg,#ef4444,#b91c1c)}.rightbar{display:grid;grid-template-rows:auto auto auto 1fr;overflow:hidden}.panel{padding:18px;border-bottom:1px solid var(--border)}.panel:last-child{border-bottom:none;overflow:auto}.panel h3{margin:0 0 12px;font-size:14px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.08em}.stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.mini-card{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.06);border-radius:18px;padding:14px}.mini-card .label{color:var(--muted);font-size:12px}.mini-card .value{font-size:18px;margin-top:6px;font-weight:700}.pill{display:inline-block;padding:6px 10px;border-radius:999px;background:rgba(255,255,255,.06);font-size:12px;color:var(--text)}.wave{display:flex;align-items:center;justify-content:center;gap:6px;height:42px;margin-top:4px}.bar{width:6px;background:linear-gradient(180deg,#34d399,#60a5fa);border-radius:999px;opacity:.35}.bar:nth-child(1){height:10px}.bar:nth-child(2){height:18px}.bar:nth-child(3){height:28px}.bar:nth-child(4){height:18px}.bar:nth-child(5){height:10px}.bar.active{opacity:1}.log-box{background:rgba(2,6,23,.75);border:1px solid rgba(255,255,255,.06);border-radius:18px;padding:12px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:11px;line-height:1.5;color:#cbd5e1;height:100%;overflow:auto;white-space:pre-wrap}.hint{margin-top:8px;font-size:12px;color:var(--muted);line-height:1.5}@media (max-width:1100px){.app{grid-template-columns:88px 1fr}.rightbar{display:none}}
+  </style>
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar">
+      <div class="nav-col">
+        <div class="brand">🦞</div>
+        <button class="nav-btn active">💬</button>
+        <button class="nav-btn">🎙️</button>
+        <button class="nav-btn">⚙️</button>
+      </div>
+      <div class="nav-col"><button class="nav-btn">🌙</button></div>
+    </aside>
+
+    <main class="main">
+      <div class="topbar">
+        <div class="title-wrap">
+          <h1>小龙虾语音助手</h1>
+          <p>本地 OpenClaw · Piper · Whisper · Porcupine</p>
+        </div>
+        <div class="status-pill"><span id="dot" class="dot"></span><span id="statusText">未连接后端</span></div>
+      </div>
+
+      <div class="chat-scroll" id="chatScroll">
+        <div class="welcome">
+          <h2>欢迎回来</h2>
+          <p>这版 UI 已支持从界面直接切换思考模型。默认推荐使用免费路由模型，也可以从下拉框选择常用免费模型，或者输入自定义模型名。</p>
+        </div>
+      </div>
+
+      <div class="composer">
+        <div class="stack">
+          <div class="input-shell">
+            <div style="color:#94a3b8">⌘K</div>
+            <textarea id="prompt" rows="1" placeholder="这里先作为预留输入框，后续可以接文字对话与设置搜索…"></textarea>
+          </div>
+          <div class="model-shell">
+            <div class="model-label">模型</div>
+            <select id="modelSelect">
+              <option value="openrouter/free">OpenRouter Free Router（默认免费）</option>
+              <option value="meta-llama/llama-3.2-3b-instruct:free">Llama 3.2 3B Instruct Free</option>
+              <option value="deepseek/deepseek-r1:free">DeepSeek R1 Free</option>
+              <option value="custom">自定义...</option>
+            </select>
+            <input id="customModel" placeholder="输入自定义模型名，如 qwen/qwen3-coder" style="display:none" />
+            <button class="btn btn-muted" onclick="saveModel()">保存模型</button>
+          </div>
+        </div>
+        <div class="action-group">
+          <button class="btn btn-muted" onclick="refreshStatus()">刷新</button>
+          <button class="btn btn-primary" onclick="startVoice()">启动</button>
+          <button class="btn btn-danger" onclick="stopVoice()">停止</button>
+        </div>
+      </div>
+    </main>
+
+    <aside class="rightbar">
+      <div class="panel">
+        <h3>运行状态</h3>
+        <div class="stat-grid">
+          <div class="mini-card"><div class="label">当前模式</div><div id="modeValue" class="value">待机</div></div>
+          <div class="mini-card"><div class="label">运行时长</div><div id="uptimeValue" class="value">-</div></div>
+        </div>
+      </div>
+      <div class="panel">
+        <h3>当前模型</h3>
+        <div id="modelBadge" class="pill">未设置</div>
+        <div class="hint">点击下拉框可切换默认思考模型。保存后，重新启动助手即可生效。</div>
+      </div>
+      <div class="panel">
+        <h3>语音活动</h3>
+        <div class="wave" id="wave"><span class="bar"></span><span class="bar"></span><span class="bar"></span><span class="bar"></span><span class="bar"></span></div>
+      </div>
+      <div class="panel">
+        <h3>实时日志</h3>
+        <div id="logBox" class="log-box">等待后端连接...</div>
+      </div>
+    </aside>
+  </div>
+
+  <script>
+    const API = 'http://127.0.0.1:8000';
+    const chatScroll = document.getElementById('chatScroll');
+    const logBox = document.getElementById('logBox');
+    const statusText = document.getElementById('statusText');
+    const dot = document.getElementById('dot');
+    const modeValue = document.getElementById('modeValue');
+    const uptimeValue = document.getElementById('uptimeValue');
+    const modelBadge = document.getElementById('modelBadge');
+    const waveBars = [...document.querySelectorAll('.bar')];
+    const modelSelect = document.getElementById('modelSelect');
+    const customModel = document.getElementById('customModel');
+    let renderedKeys = new Set();
+
+    modelSelect.addEventListener('change', () => {
+      customModel.style.display = modelSelect.value === 'custom' ? 'block' : 'none';
+    });
+
+    function escapeHtml(text) {
+      return (text || '').replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;');
+    }
+    function fmtUptime(sec) {
+      if (!sec && sec !== 0) return '-';
+      const m = Math.floor(sec / 60), s = sec % 60;
+      return m > 0 ? `${m}m ${s}s` : `${s}s`;
+    }
+    function setWave(active) { waveBars.forEach(bar => bar.classList.toggle('active', active)); }
+
+    function pushMessage(kind, text, ts) {
+      const key = `${kind}:${text}:${ts || ''}`;
+      if (renderedKeys.has(key)) return;
+      renderedKeys.add(key);
+      const row = document.createElement('div'); row.className = `message-row ${kind === 'user' ? 'user' : 'assistant'}`;
+      const avatar = document.createElement('div'); avatar.className = 'avatar'; avatar.textContent = kind === 'user' ? '你' : '🦞';
+      const body = document.createElement('div');
+      const bubble = document.createElement('div'); bubble.className = 'bubble'; bubble.innerHTML = escapeHtml(text);
+      const meta = document.createElement('div'); meta.className = 'meta'; meta.textContent = kind === 'user' ? '你' : '小龙虾';
+      body.appendChild(bubble); body.appendChild(meta);
+      if (kind === 'user') { row.appendChild(body); row.appendChild(avatar); } else { row.appendChild(avatar); row.appendChild(body); }
+      chatScroll.appendChild(row); chatScroll.scrollTop = chatScroll.scrollHeight;
+    }
+
+    async function startVoice(){ await fetch(`${API}/start`, { method:'POST', headers:{'Content-Type':'application/json'}, body:'{}' }); refreshStatus(); }
+    async function stopVoice(){ await fetch(`${API}/stop`, { method:'POST' }); refreshStatus(); }
+
+    async function saveModel() {
+      const value = modelSelect.value === 'custom' ? customModel.value.trim() : modelSelect.value;
+      if (!value) return;
+      await fetch(`${API}/config`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ openclaw_model: value })
+      });
+      modelBadge.textContent = value;
+      alert(`模型已保存为：${value}\n重新启动助手后生效。`);
+      refreshStatus();
+    }
+
+    async function refreshStatus() {
+      try {
+        const res = await fetch(`${API}/status`);
+        const data = await res.json();
+        const running = !!data.running;
+        statusText.textContent = running ? '语音助手运行中' : '语音助手已停止';
+        dot.classList.toggle('on', running);
+        modeValue.textContent = running ? '在线' : '待机';
+        uptimeValue.textContent = fmtUptime(data.uptime_seconds);
+        setWave(running);
+        logBox.textContent = (data.logs || []).join('\n') || '暂无日志';
+        logBox.scrollTop = logBox.scrollHeight;
+        modelBadge.textContent = data.config?.openclaw_model || '未设置';
+
+        const currentModel = data.config?.openclaw_model || '';
+        const options = [...modelSelect.options].map(o => o.value);
+        if (options.includes(currentModel)) {
+          modelSelect.value = currentModel;
+          customModel.style.display = 'none';
+          customModel.value = '';
+        } else if (currentModel) {
+          modelSelect.value = 'custom';
+          customModel.style.display = 'block';
+          customModel.value = currentModel;
+        }
+
+        (data.events || []).slice(-20).forEach(evt => {
+          if (evt.kind === 'user' || evt.kind === 'assistant') pushMessage(evt.kind, evt.text, evt.ts);
+        });
+      } catch (err) {
+        statusText.textContent = '未连接后端';
+        dot.classList.remove('on');
+        modeValue.textContent = '离线';
+        setWave(false);
+      }
+    }
+
+    document.getElementById('prompt').addEventListener('input', function(){ this.style.height='auto'; this.style.height=`${Math.min(this.scrollHeight,100)}px`; });
+    refreshStatus();
+    setInterval(refreshStatus, 1200);
+  </script>
+</body>
+</html>
