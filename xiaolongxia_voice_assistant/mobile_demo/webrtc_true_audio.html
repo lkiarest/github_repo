@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<body>
+<h3>WebRTC 真音频测试</h3>
+<button onclick="start()">Start</button>
+<button onclick="commit()">Commit</button>
+<script>
+let pc, dc;
+
+async function start(){
+  pc = new RTCPeerConnection();
+
+  dc = pc.createDataChannel("chat");
+  dc.onmessage = e=>console.log("msg:", e.data);
+
+  const stream = await navigator.mediaDevices.getUserMedia({audio:true});
+  stream.getTracks().forEach(t=>pc.addTrack(t, stream));
+
+  const offer = await pc.createOffer();
+  await pc.setLocalDescription(offer);
+
+  const res = await fetch('/rtc/offer', {
+    method:'POST',
+    body:JSON.stringify({sdp:offer.sdp,type:offer.type})
+  });
+
+  const answer = await res.json();
+  await pc.setRemoteDescription(answer);
+}
+
+function commit(){
+  dc.send(JSON.stringify({type:'commit'}));
+}
+</script>
+</body>
+</html>
