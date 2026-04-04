@@ -1,5 +1,4 @@
 # XiaoLongXia Voice Assistant
-
 一个面向本地部署的智能音箱式语音助手脚手架，目标是：
 
 - 本地语音唤醒 / 录音 / 断句
