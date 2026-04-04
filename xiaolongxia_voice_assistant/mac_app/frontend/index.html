@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>小龙虾助手</title>
+  <style>
+    body { font-family: -apple-system; background:#0f172a; color:white; text-align:center; }
+    .card { margin:100px auto; padding:30px; width:320px; background:#1e293b; border-radius:16px; }
+    button { padding:10px 20px; margin:10px; border:none; border-radius:10px; cursor:pointer; }
+    .start { background:#22c55e; }
+    .stop { background:#ef4444; }
+    .status { margin-top:20px; font-size:14px; color:#94a3b8; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h2>🦞 小龙虾助手</h2>
+    <button class="start" onclick="start()">启动</button>
+    <button class="stop" onclick="stop()">停止</button>
+    <div class="status" id="status">状态：未知</div>
+  </div>
+
+<script>
+async function start(){
+  await fetch('http://127.0.0.1:8000/start',{method:'POST'});
+}
+async function stop(){
+  await fetch('http://127.0.0.1:8000/stop',{method:'POST'});
+}
+
+async function refresh(){
+  try{
+    const res = await fetch('http://127.0.0.1:8000/status');
+    const data = await res.json();
+    document.getElementById('status').innerText = data.running ? '运行中' : '已停止';
+  }catch(e){
+    document.getElementById('status').innerText = '未连接后端';
+  }
+}
+setInterval(refresh,1000);
+</script>
+</body>
+</html>
